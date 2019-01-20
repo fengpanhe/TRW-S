@@ -5,10 +5,6 @@
 // See type*.h files for other types of terms.
 // template MRFEnergy<TypePotts>;
 
-void ErrorFunction(char* str)
-{
-    printf("%s", str);
-}
 // void testPotts()
 // {
 //     MRFEnergy<TypePotts>* mrf;
@@ -130,13 +126,13 @@ void testPotts2()
     D[5] = 6;
     nodes[3] = mrf->AddNode(TypePotts2::LocalSize(), TypePotts2::NodeData(D));
 
-    TypePotts2::REAL aa[36] = {0,0.1,0, 0,0,0,0.1};
+    TypePotts2::REAL aa[36] = { 0, 0.1, 0, 0, 0, 0, 0.1 };
     mrf->AddEdge(nodes[0], nodes[2], TypePotts2::EdgeData(aa));
     mrf->AddEdge(nodes[0], nodes[1], TypePotts2::EdgeData(aa));
     //     mrf->AddEdge(nodes[0], nodes[1], TypePotts2::EdgeData(2));
-//     mrf->AddEdge(nodes[3], nodes[0], TypePotts2::EdgeData(aa));
-     mrf->AddEdge(nodes[0], nodes[3], TypePotts2::EdgeData(aa));
-//     printf("%s\n", "hello");
+    //     mrf->AddEdge(nodes[3], nodes[0], TypePotts2::EdgeData(aa));
+    mrf->AddEdge(nodes[0], nodes[3], TypePotts2::EdgeData(aa));
+    //     printf("%s\n", "hello");
     // Function below is optional - it may help if, for example, nodes are added in a random order
     // mrf->SetAutomaticOrdering();
 
