@@ -84,7 +84,7 @@ void testPotts()
 template <class T>
 class MRFEnergy;
 
-const int LABLE_NUM = 6;
+const int LABEL_NUM = 6;
 
 class TypePotts2 {
 private:
@@ -202,7 +202,7 @@ private:
 
     private:
         // edge information
-        REAL m_edgePotential[LABLE_NUM][LABLE_NUM];
+        REAL m_edgePotential[LABEL_NUM][LABEL_NUM];
 
         // message
         Vector m_message;
@@ -341,9 +341,9 @@ inline void TypePotts2::Edge::Initialize(GlobalSize Kglobal, LocalSize Ki, Local
     //     int len = Kglobal.m_K * Kglobal.m_K;
     //     memset(m_edgePotential, 0, len * sizeof(REAL));
     //     memcpy();
-    for (int i = 0; i < LABLE_NUM; i++) {
-        for (int j = 0; j < LABLE_NUM; j++)
-            m_edgePotential[i][j] = data.m_edgePotential[i * LABLE_NUM + j];
+    for (int i = 0; i < LABEL_NUM; i++) {
+        for (int j = 0; j < LABEL_NUM; j++)
+            m_edgePotential[i][j] = data.m_edgePotential[i * LABEL_NUM + j];
     }
 
     memset(m_message.m_data, 0, Kglobal.m_K * sizeof(REAL));
