@@ -50,6 +50,9 @@ double dCost(int pix, int label);
 double fnCost(int pix1, int pix2, int label1, int label2);
 bool existSameEdge(int pix1, int pix2);
 
+/**
+ * inMatrix <imid>,<eid>,<tid>,<score>
+ */
 class MexFunction : public matlab::mex::Function {
     void operator()(matlab::mex::ArgumentList outputs,
         matlab::mex::ArgumentList inputs)
@@ -69,7 +72,9 @@ class MexFunction : public matlab::mex::Function {
             int index0 = i * 3;
             int index1 = index0 + 1;
             int index2 = index0 + 2;
-            if (inMatrix[index0][1] != inMatrix[index1][1] || inMatrix[index0][1] != inMatrix[index2][1]) {
+            if ((int)inMatrix[index0][2] != (int)inMatrix[index1][2] || (int)inMatrix[index0][2] != inMatrix[index2][2]) {
+                stream << inMatrix[index0][2] << " " << inMatrix[index1][2] << " " << inMatrix[index2][2] << "\n";
+                displayOnMATLAB(stream);
                 matlabPtr->feval(matlab::engine::convertUTF8StringToUTF16String("error"),
                     0, std::vector<matlab::data::Array>({ factory.createScalar("Tid is mismatch") }));
             }
@@ -77,11 +82,11 @@ class MexFunction : public matlab::mex::Function {
                 matlabPtr->feval(matlab::engine::convertUTF8StringToUTF16String("error"),
                     0, std::vector<matlab::data::Array>({ factory.createScalar("Imageid is mismatch") }));
             }
-            tjs[i].imid = inMatrix[index0][0];
-            tjs[i].tid = inMatrix[index0][1];
-            tjs[i].eids[0] = inMatrix[index0][2];
-            tjs[i].eids[1] = inMatrix[index1][2];
-            tjs[i].eids[2] = inMatrix[index2][2];
+            tjs[i].imid = (int)inMatrix[index0][0];
+            tjs[i].tid = (int)inMatrix[index0][2];
+            tjs[i].eids[0] = (int)inMatrix[index0][1];
+            tjs[i].eids[1] = (int)inMatrix[index1][1];
+            tjs[i].eids[2] = (int)inMatrix[index2][1];
             tjs[i].score[0] = inMatrix[index0][3];
             tjs[i].score[1] = inMatrix[index1][3];
             tjs[i].score[2] = inMatrix[index2][3];
@@ -93,8 +98,10 @@ class MexFunction : public matlab::mex::Function {
             if (tjs[i].imid != imid) {
                 this->use_TRWS(im_start_index, i - 1);
                 im_start_index = i;
+                imid = tjs[im_start_index].imid;
             }
         }
+        this->use_TRWS(im_start_index, t_junction_num - 1);
         for (int i = 0; i < t_junction_num; i++) {
             int index0 = i * 3;
             int index1 = index0 + 1;
@@ -184,33 +191,33 @@ class MexFunction : public matlab::mex::Function {
             switch (mrf->GetSolution(nodes[i])) {
             case LABEL_ABC:
                 tjs[im_start_index + i].rank[0] = 3;
-                tjs[im_start_index + i].rank[2] = 2;
-                tjs[im_start_index + i].rank[3] = 1;
+                tjs[im_start_index + i].rank[1] = 2;
+                tjs[im_start_index + i].rank[2] = 1;
                 break;
             case LABEL_ACB:
                 tjs[im_start_index + i].rank[0] = 3;
-                tjs[im_start_index + i].rank[2] = 1;
-                tjs[im_start_index + i].rank[3] = 2;
+                tjs[im_start_index + i].rank[1] = 1;
+                tjs[im_start_index + i].rank[2] = 2;
                 break;
             case LABEL_BAC:
                 tjs[im_start_index + i].rank[0] = 2;
-                tjs[im_start_index + i].rank[2] = 3;
-                tjs[im_start_index + i].rank[3] = 1;
+                tjs[im_start_index + i].rank[1] = 3;
+                tjs[im_start_index + i].rank[2] = 1;
                 break;
             case LABEL_CAB:
                 tjs[im_start_index + i].rank[0] = 2;
-                tjs[im_start_index + i].rank[2] = 1;
-                tjs[im_start_index + i].rank[3] = 3;
+                tjs[im_start_index + i].rank[1] = 1;
+                tjs[im_start_index + i].rank[2] = 3;
                 break;
             case LABEL_CBA:
                 tjs[im_start_index + i].rank[0] = 1;
-                tjs[im_start_index + i].rank[2] = 2;
-                tjs[im_start_index + i].rank[3] = 3;
+                tjs[im_start_index + i].rank[1] = 2;
+                tjs[im_start_index + i].rank[2] = 3;
                 break;
             case LABEL_BCA:
                 tjs[im_start_index + i].rank[0] = 1;
-                tjs[im_start_index + i].rank[2] = 3;
-                tjs[im_start_index + i].rank[3] = 2;
+                tjs[im_start_index + i].rank[1] = 3;
+                tjs[im_start_index + i].rank[2] = 2;
                 break;
             default:
                 break;
