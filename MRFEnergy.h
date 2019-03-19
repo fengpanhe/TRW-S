@@ -548,7 +548,7 @@ int MRFEnergy<T>::Minimize_TRW_S(Options& options, REAL& lowerBound, REAL& energ
         // print lower bound and energy, if necessary
         if (lastIter || (iter >= options.m_printMinIter && (options.m_printIter < 1 || iter % options.m_printIter == 0))) {
             energy = ComputeSolutionAndEnergy();
-            printf("iter %d: lower bound = %f, energy = %f\n", iter, lowerBound, energy);
+            // printf("iter %d: lower bound = %f, energy = %f\n", iter, lowerBound, energy);
         }
 
         if (lastIter)
